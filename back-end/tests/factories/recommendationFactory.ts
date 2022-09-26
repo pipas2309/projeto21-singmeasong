@@ -91,3 +91,14 @@ export async function __newRecommendation(): Promise<NewRecommendation> {
 export async function __getRandomVideo(): Promise<Recommendation> {
     return await (await supertest(app).get('/recommendations/random')).body
 }
+
+
+interface RecommendationPoorScore extends Omit<Recommendation, "id"> {};
+
+export async function __newRecommendationDownvote(): Promise<RecommendationPoorScore> {
+    return await {
+        name: faker.company.name(),
+        youtubeLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+        score: -5
+    }
+}

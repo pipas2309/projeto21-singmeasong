@@ -1,7 +1,7 @@
 import app from '../../src/app';
 import supertest from 'supertest';
-import { deleteTable, disconnect } from '../factories/scenarioFactory';
-import __createRecommendation, { __getRandomVideo, __newRecommendation } from '../factories/recommendationFactory';
+import { createDownvoteData, deleteTable, disconnect } from '../factories/scenarioFactory';
+import __createRecommendation, { __getRandomVideo, __newRecommendation, __newRecommendationDownvote } from '../factories/recommendationFactory';
 
 const server = supertest(app);
 
@@ -57,6 +57,35 @@ describe("Teste em POST /recommendations", () => {
         const data = await __getRandomVideo();
 
         const result = await server.post(`/recommendations/${data.id + 42}/upvote`);
+        expect(result.status).toBe(404);
+    });
+
+    it("Teste de downvote com sucesso", async () => {
+        const recommendation = await __newRecommendation(); 
+
+        await server.post('/recommendations').send(recommendation);
+        const data = await __getRandomVideo();
+
+        const result = await server.post(`/recommendations/${data.id}/downvote`);
+        expect(result.status).toBe(200);
+    });
+
+    it("Teste de downvote com sucesso e removendo", async () => {
+        await createDownvoteData();
+
+        const data = await __getRandomVideo();
+
+        const result = await server.post(`/recommendations/${data.id}/downvote`);
+        const resultRemoved = await __getRandomVideo();
+        const resultStatus = await server.post(`/recommendations/${data.id}/downvote`);
+
+        expect(result.status).toBe(200);
+        expect(resultRemoved).toMatchObject({});
+        expect(resultStatus.status).toBe(404);
+    });
+
+    it("Teste de downvote com falha", async () => {
+        const result = await server.post(`/recommendations/-1/downvote`);
         expect(result.status).toBe(404);
     });
 });
