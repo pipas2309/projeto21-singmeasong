@@ -8,10 +8,7 @@ import recommendationFactory, { __createOrderedRecommendation, __createRecommend
 
 describe('Testes unitários do recommendation Service', () => {
 
-    beforeEach(async()=>{
-        jest.clearAllMocks();
-        jest.resetAllMocks();
-    });
+  
 
     it('Testa a função insert com sucesso', async () => {      
       const recommendation = await recommendationFactory();
