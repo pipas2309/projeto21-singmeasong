@@ -1,5 +1,7 @@
 import { faker } from '@faker-js/faker';
-import { Recommendation } from '@prisma/client';
+import { prisma, Recommendation } from '@prisma/client';
+import supertest from 'supertest';
+import app from '../../src/app';
 
 export default async function __createRecommendation(): Promise<Recommendation> {
     return await {
@@ -75,4 +77,36 @@ export async function __recommendationList(): Promise<Recommendation[]> {
         youtubeLink: faker.internet.url(),
         score: faker.datatype.number({ min: 0, max: 100, precision: 1 })
     }]
+}
+
+interface NewRecommendation extends Omit<Recommendation, "id" | "score"> {};
+
+export async function __newRecommendation(): Promise<NewRecommendation> {
+    return await {
+        name: faker.company.name(),
+        youtubeLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+    }
+}
+
+export async function __getRandomVideo(): Promise<Recommendation> {
+    return await (await supertest(app).get('/recommendations/random')).body
+}
+
+
+interface RecommendationScore extends Omit<Recommendation, "id"> {};
+
+export async function __newRecommendationDownvote(): Promise<RecommendationScore> {
+    return await {
+        name: faker.company.name(),
+        youtubeLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+        score: -5
+    }
+}
+
+export async function __newRecommendationScore(): Promise<RecommendationScore> {
+    return await {
+        name: faker.company.name(),
+        youtubeLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+        score: faker.datatype.number({ min: 3, max: 10, precision: 1 })
+    }
 }
