@@ -11,4 +11,3 @@ async function set (_req: Request, res: Response) {
 export const e2eController = {
     set
   };
-  
