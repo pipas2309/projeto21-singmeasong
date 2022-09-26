@@ -108,4 +108,25 @@ describe("Testes para navegar para a aba RANDOM e conferir o resultado", () => {
     });
 });
 
+describe("Testes para navegar para a aba TOP e conferir o score", () => {
 
+    let score = Number.POSITIVE_INFINITY;
+
+    it("Indo para aba TOP", () => {
+        cy.get("svg[data-cy=Top]").click();
+        cy.url().should("eq", "http://localhost:3000/top");
+    });
+
+    it("Conferindo os resultados da ordem do score", () => {
+        cy.get("body").find("article").should("have.length", 5)
+    });
+    
+    it("Conferindo os scores", () => {
+        cy.get("div[data-cy=Score]").each((el) => {
+            const text = Number(el.text());
+            expect(text).to.be.at.most(score)
+            score = text;
+        })
+    });
+
+});
