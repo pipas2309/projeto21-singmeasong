@@ -23,3 +23,13 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+/*eslint-disable no-undef */
+
+Cypress.Commands.add('clearDatabase', () => {
+    cy.request('POST', 'http://localhost:5000/test/clearData', {});
+});
+
+Cypress.Commands.add('seedDatabase', () => {
+    cy.request('POST', 'http://localhost:5000/test/createData', {});
+});
