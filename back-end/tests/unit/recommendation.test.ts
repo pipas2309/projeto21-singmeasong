@@ -200,6 +200,19 @@ describe('Testes unitários do recommendation Service', () => {
     });
 
     it('Testa a função getRandom não encontrando nada', async () => {
+      jest
+        .spyOn(Math, "random")
+        .mockReturnValueOnce(0.9);
+
+      jest
+        .spyOn(recommendationRepository, "findAll")
+        .mockResolvedValueOnce([]);
+      
+
+      const result = recommendationService.getRandom();
+
+      expect(recommendationRepository.findAll).toBeCalled();
+      await expect(result).rejects.toEqual({ type: "not_found", message: "" });
     });
 
     it('Testa a função getByScore com itens', async () => {
