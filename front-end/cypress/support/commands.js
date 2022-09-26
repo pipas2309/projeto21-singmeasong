@@ -26,10 +26,6 @@
 
 /*eslint-disable no-undef */
 
-Cypress.Commands.add('clearDatabase', () => {
-    cy.request('POST', 'http://localhost:5000/test/clearData', {});
-});
-
-Cypress.Commands.add('seedDatabase', () => {
-    cy.request('POST', 'http://localhost:5000/test/createData', {});
+Cypress.Commands.add('setDatabase', () => {
+    cy.request("GET", 'http://localhost:5000/test/set');
 });

@@ -12,9 +12,9 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/recommendations", recommendationRouter);
-//if(process.env.MODE === 'TEST') {
+if(process.env.MODE === 'TEST') {
     app.use("/test", e2eRouter);
-//}
+}
 
 app.use(errorHandlerMiddleware);
 
