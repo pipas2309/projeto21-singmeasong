@@ -5,10 +5,13 @@ import { recommendationRepository } from '../../src/repositories/recommendationR
 import { recommendationService } from '../../src/services/recommendationsService';
 
 import recommendationFactory, { __createOrderedRecommendation, __createRecommendationForRandom, __recommendationList } from '../factories/recommendationFactory';
+import { deleteTable } from '../factories/scenarioFactory';
 
 describe('Testes unitários do recommendation Service', () => {
 
-  
+  beforeEach(async () => {
+    await deleteTable();
+});
 
     it('Testa a função insert com sucesso', async () => {      
       const recommendation = await recommendationFactory();

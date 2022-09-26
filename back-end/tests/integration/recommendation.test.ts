@@ -144,4 +144,16 @@ describe("Teste em GET /recommendations", () => {
 
         expect(result.status).toBe(404);
     });
+
+    it("Teste de pegar recomendação por score", async () => {
+        await createManyData(5);
+                       
+        const result = await server.get('/recommendations/top/3');
+
+        expect(result.status).toBe(200);
+        expect(result.body).toBeInstanceOf(Array);
+        expect(result.body).toHaveLength(3);
+        expect(result.body[0].score).toBeGreaterThanOrEqual(result.body[1].score);
+        expect(result.body[1].score).toBeGreaterThanOrEqual(result.body[2].score);
+    });
 });
