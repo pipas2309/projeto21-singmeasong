@@ -1,6 +1,6 @@
 import app from '../../src/app';
 import supertest from 'supertest';
-import { createDownvoteData, deleteTable, disconnect } from '../factories/scenarioFactory';
+import { createDownvoteData, createManyData, deleteTable, disconnect } from '../factories/scenarioFactory';
 import __createRecommendation, { __getRandomVideo, __newRecommendation, __newRecommendationDownvote } from '../factories/recommendationFactory';
 
 const server = supertest(app);
@@ -125,5 +125,23 @@ describe("Teste em GET /recommendations", () => {
 
         expect(result.status).toBe(404);
 
+    });
+
+    it("Teste de pegar recomendação aleatóriamente", async () => {
+        await createManyData();
+        
+        const all = await server.get('/recommendations');
+               
+        const result = await server.get('/recommendations/random');
+
+        expect(result.status).toBe(200);
+        expect(result.body).toBeInstanceOf(Object);
+        expect(all.body).toContainEqual(result.body);
+    });
+
+    it("Teste de pegar recomendação aleatóriamente, vazio", async () => {
+        const result = await server.get('/recommendations/random');
+
+        expect(result.status).toBe(404);
     });
 });

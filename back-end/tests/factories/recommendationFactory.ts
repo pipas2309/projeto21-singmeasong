@@ -93,12 +93,20 @@ export async function __getRandomVideo(): Promise<Recommendation> {
 }
 
 
-interface RecommendationPoorScore extends Omit<Recommendation, "id"> {};
+interface RecommendationScore extends Omit<Recommendation, "id"> {};
 
-export async function __newRecommendationDownvote(): Promise<RecommendationPoorScore> {
+export async function __newRecommendationDownvote(): Promise<RecommendationScore> {
     return await {
         name: faker.company.name(),
         youtubeLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
         score: -5
+    }
+}
+
+export async function __newRecommendationScore(): Promise<RecommendationScore> {
+    return await {
+        name: faker.company.name(),
+        youtubeLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+        score: faker.datatype.number({ min: 3, max: 10, precision: 1 })
     }
 }
