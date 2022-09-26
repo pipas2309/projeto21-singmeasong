@@ -107,4 +107,23 @@ describe("Teste em GET /recommendations", () => {
         expect(result.body).toStrictEqual([]);
     });
 
+    it("Teste de pegar recomendação por Id", async () => {
+        const recommendation = await __newRecommendation(); 
+
+        await server.post('/recommendations').send(recommendation);
+
+        const aux = await __getRandomVideo();
+        
+        const result = await server.get(`/recommendations/${aux.id}`);
+
+        expect(result.status).toBe(200);
+        expect(result.body).toBeInstanceOf(Object);
+    });
+
+    it("Teste de pegar recomendação por Id sem existir", async () => {
+        const result = await server.get('/recommendations/-1');
+
+        expect(result.status).toBe(404);
+
+    });
 });
