@@ -4,7 +4,7 @@ import { jest } from "@jest/globals";
 import { recommendationRepository } from '../../src/repositories/recommendationRepository';
 import { recommendationService } from '../../src/services/recommendationsService';
 
-import recommendationFactory from '../factories/recommendationFactory';
+import recommendationFactory, { __createOrderedRecommendation } from '../factories/recommendationFactory';
 
 describe('Testes unitários do recommendation Service', () => {
 
@@ -134,11 +134,11 @@ describe('Testes unitários do recommendation Service', () => {
     });
 
     it('Testa a função get', async () => {
-      const recommendation = await recommendationFactory();
+      const recommendation = await __createOrderedRecommendation();
 
       jest
         .spyOn(recommendationRepository, "findAll")
-        .mockResolvedValueOnce([recommendation]);
+        .mockResolvedValueOnce(recommendation);
 
       const result = await recommendationService.get();
 
@@ -147,16 +147,18 @@ describe('Testes unitários do recommendation Service', () => {
     });
 
     it('Testa a função getTop', async () => {
-      const recommendation = await recommendationFactory();
+      const recommendation = await __createOrderedRecommendation();
 
       jest
         .spyOn(recommendationRepository, "getAmountByScore")
-        .mockResolvedValueOnce([recommendation]);
+        .mockResolvedValueOnce(recommendation);
 
-      const result = await recommendationService.get();
+      const result = await recommendationService.getTop(recommendation.length);
 
-      expect(recommendationRepository.findAll).toBeCalled();
+      expect(recommendationRepository.getAmountByScore).toBeCalled();
       expect(result).toBeInstanceOf(Array);
+      expect(result[0].score).toBeGreaterThan(result[1].score);
+      expect(result).toStrictEqual(recommendation);
     });
 
     it('Testa a função getRandom com sucesso', async () => {
