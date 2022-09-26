@@ -130,3 +130,16 @@ describe("Testes para navegar para a aba TOP e conferir o score", () => {
     });
 
 });
+
+describe("Testes para navegar para a aba HOME e conferir o body", () => {
+
+    it("Indo para aba HOME", () => {
+        cy.get("svg[data-cy=Home]").click();
+        cy.url().should("eq", "http://localhost:3000/");
+    });
+
+    it("Conferindo os resultados da ordem do score", () => {
+        cy.get("body").find("article").should("have.length", 5)
+    });
+    
+});
