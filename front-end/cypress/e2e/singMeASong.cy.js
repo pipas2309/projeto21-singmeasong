@@ -5,7 +5,7 @@ beforeEach(async () => {
     await cy.setDatabase();
 });
 
-describe("Testes para criar e acessar a página", () => {
+describe("Testes para criar e curtir uma recomendação", () => {
 
     const name = faker.name.fullName();
     const youtubeLink = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
@@ -95,3 +95,17 @@ describe("Testes para criar e acessar a página", () => {
         cy.contains(`div[data-cy=YT-${name}]`).should("not.exist");
     });
 })
+
+describe("Testes para navegar para a aba RANDOM e conferir o resultado", () => {
+
+    it("Indo para aba Random", () => {
+        cy.get("svg[data-cy=Random]").click();
+        cy.url().should("eq", "http://localhost:3000/random");
+    });
+
+    it("Conferindo o resultado do random", () => {
+        cy.get("div[data-cy=Recommendation]").should("be.visible")
+    });
+});
+
+

@@ -4,7 +4,7 @@ import { e2eService } from "../services/e2eService";
 
 async function set (_req: Request, res: Response) {
     await e2eService.deleteData();
-    await e2eService.insert(1);
+    await e2eService.insert(5);
     return res.send("Seeded database").status(202);
 }
 
