@@ -93,7 +93,7 @@ export async function __getRandomVideo(): Promise<Recommendation> {
 }
 
 
-interface RecommendationScore extends Omit<Recommendation, "id"> {};
+export interface RecommendationScore extends Omit<Recommendation, "id"> {};
 
 export async function __newRecommendationDownvote(): Promise<RecommendationScore> {
     return await {
