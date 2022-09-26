@@ -4,7 +4,7 @@ import { jest } from "@jest/globals";
 import { recommendationRepository } from '../../src/repositories/recommendationRepository';
 import { recommendationService } from '../../src/services/recommendationsService';
 
-import recommendationFactory, { __createOrderedRecommendation, __createRecommendationForRandom } from '../factories/recommendationFactory';
+import recommendationFactory, { __createOrderedRecommendation, __createRecommendationForRandom, __recommendationList } from '../factories/recommendationFactory';
 
 describe('Testes unitários do recommendation Service', () => {
 
@@ -134,7 +134,7 @@ describe('Testes unitários do recommendation Service', () => {
     });
 
     it('Testa a função get', async () => {
-      const recommendation = await __createOrderedRecommendation();
+      const recommendation = await __recommendationList();
 
       jest
         .spyOn(recommendationRepository, "findAll")
@@ -213,12 +213,6 @@ describe('Testes unitários do recommendation Service', () => {
 
       expect(recommendationRepository.findAll).toBeCalled();
       await expect(result).rejects.toEqual({ type: "not_found", message: "" });
-    });
-
-    it('Testa a função getByScore com itens', async () => {
-    });
-
-    it('Testa a função getByScore vazia', async () => {
     });
     
   });

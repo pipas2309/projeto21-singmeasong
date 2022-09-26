@@ -57,3 +57,22 @@ export async function __createRecommendationForRandom(): Promise<Recommendation[
         score: faker.datatype.number({ min: 0, max: 3, precision: 1 })
     }]
 }
+
+export async function __recommendationList(): Promise<Recommendation[]> {
+    return await [{
+        id: faker.datatype.number(),
+        name: faker.company.name(),
+        youtubeLink: faker.internet.url(),
+        score: faker.datatype.number({ min: 0, max: 100, precision: 1 })
+    },{
+        id: faker.datatype.number(),
+        name: faker.company.name(),
+        youtubeLink: faker.internet.url(),
+        score: faker.datatype.number({ min: 0, max: 100, precision: 1 })
+    },{
+        id: faker.datatype.number(),
+        name: faker.company.name(),
+        youtubeLink: faker.internet.url(),
+        score: faker.datatype.number({ min: 0, max: 100, precision: 1 })
+    }]
+}
