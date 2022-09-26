@@ -76,3 +76,12 @@ export async function __recommendationList(): Promise<Recommendation[]> {
         score: faker.datatype.number({ min: 0, max: 100, precision: 1 })
     }]
 }
+
+interface NewRecommendation extends Omit<Recommendation, "id" | "score"> {};
+
+export async function __newRecommendation(): Promise<NewRecommendation> {
+    return await {
+        name: faker.company.name(),
+        youtubeLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+    }
+}
