@@ -100,7 +100,7 @@ describe('Testes unitários do recommendation Service', () => {
         .spyOn(recommendationRepository, "remove")
         .mockResolvedValueOnce();
       
-      const result = await recommendationService.downvote(recommendation.id)
+      const result = await recommendationService.downvote(recommendation.id);
 
       expect(recommendationRepository.find).toBeCalled();
       expect(recommendationRepository.updateScore).toBeCalled();
@@ -109,15 +109,54 @@ describe('Testes unitários do recommendation Service', () => {
     });
 
     it('Testa a função getByIdOrFail com sucesso', async () => {
+      const recommendation = await recommendationFactory();
+
+      jest
+        .spyOn(recommendationRepository, "find")
+        .mockResolvedValueOnce(recommendation);
+
+      const result = await recommendationService.getById(recommendation.id);
+
+      expect(recommendationRepository.find).toBeCalled();
+      expect(result).toBe(recommendation);
     });
 
     it('Testa a função getByIdOrFail não encontrando o item', async () => {
+      const recommendation = await recommendationFactory();
+
+      jest
+        .spyOn(recommendationRepository, "find")
+        .mockResolvedValueOnce(null);
+
+      const result = recommendationService.getById(recommendation.id);
+
+      await expect(result).rejects.toEqual({ type: "not_found", message: "" })
     });
 
     it('Testa a função get', async () => {
+      const recommendation = await recommendationFactory();
+
+      jest
+        .spyOn(recommendationRepository, "findAll")
+        .mockResolvedValueOnce([recommendation]);
+
+      const result = await recommendationService.get();
+
+      expect(recommendationRepository.findAll).toBeCalled();
+      expect(result).toBeInstanceOf(Array);
     });
 
     it('Testa a função getTop', async () => {
+      const recommendation = await recommendationFactory();
+
+      jest
+        .spyOn(recommendationRepository, "getAmountByScore")
+        .mockResolvedValueOnce([recommendation]);
+
+      const result = await recommendationService.get();
+
+      expect(recommendationRepository.findAll).toBeCalled();
+      expect(result).toBeInstanceOf(Array);
     });
 
     it('Testa a função getRandom com sucesso', async () => {
