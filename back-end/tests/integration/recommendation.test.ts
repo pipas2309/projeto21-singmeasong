@@ -1,7 +1,7 @@
 import app from '../../src/app';
 import supertest from 'supertest';
 import { deleteTable, disconnect } from '../factories/scenarioFactory';
-import __createRecommendation, { __newRecommendation } from '../factories/recommendationFactory';
+import __createRecommendation, { __getRandomVideo, __newRecommendation } from '../factories/recommendationFactory';
 
 const server = supertest(app);
 
@@ -39,6 +39,25 @@ describe("Teste em POST /recommendations", () => {
         const result = await server.post('/recommendations').send(recommendation);
 
         expect(result.status).toBe(409)
+    });
+
+    it("Teste de upvote com sucesso", async () => {
+        const recommendation = await __newRecommendation(); 
+
+        await server.post('/recommendations').send(recommendation);
+        const data = await __getRandomVideo();
+
+        const result = await server.post(`/recommendations/${data.id}/upvote`);
+        expect(result.status).toBe(200);
+    });
+    it("Teste de upvote com falha", async () => {
+        const recommendation = await __newRecommendation(); 
+
+        await server.post('/recommendations').send(recommendation);
+        const data = await __getRandomVideo();
+
+        const result = await server.post(`/recommendations/${data.id + 42}/upvote`);
+        expect(result.status).toBe(404);
     });
 });
 describe("Teste em GET /recommendations", () => {

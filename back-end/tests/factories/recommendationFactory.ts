@@ -1,5 +1,7 @@
 import { faker } from '@faker-js/faker';
-import { Recommendation } from '@prisma/client';
+import { prisma, Recommendation } from '@prisma/client';
+import supertest from 'supertest';
+import app from '../../src/app';
 
 export default async function __createRecommendation(): Promise<Recommendation> {
     return await {
@@ -84,4 +86,8 @@ export async function __newRecommendation(): Promise<NewRecommendation> {
         name: faker.company.name(),
         youtubeLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
     }
+}
+
+export async function __getRandomVideo(): Promise<Recommendation> {
+    return await (await supertest(app).get('/recommendations/random')).body
 }
