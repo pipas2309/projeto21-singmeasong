@@ -4,7 +4,7 @@ import { jest } from "@jest/globals";
 import { recommendationRepository } from '../../src/repositories/recommendationRepository';
 import { recommendationService } from '../../src/services/recommendationsService';
 
-import recommendationFactory, { __createOrderedRecommendation } from '../factories/recommendationFactory';
+import recommendationFactory, { __createOrderedRecommendation, __createRecommendationForRandom } from '../factories/recommendationFactory';
 
 describe('Testes unitários do recommendation Service', () => {
 
@@ -161,7 +161,42 @@ describe('Testes unitários do recommendation Service', () => {
       expect(result).toStrictEqual(recommendation);
     });
 
-    it('Testa a função getRandom com sucesso', async () => {
+    it('Testa a função getRandom com sucesso e 70%', async () => {
+      const recommendations = await __createRecommendationForRandom();
+
+      jest
+        .spyOn(Math, "random")
+        .mockReturnValueOnce(0.5);
+
+      jest
+        .spyOn(recommendationRepository, "findAll")
+        .mockImplementationOnce((): any => { return recommendations.filter(value => value.score >= 10 ) });
+      
+
+      const result = await recommendationService.getRandom();
+
+      expect(recommendationRepository.findAll).toBeCalled();
+      expect(result).toBeInstanceOf(Object);
+      expect(recommendations).toContain(result);
+    });
+
+    it('Testa a função getRandom com sucesso e 30%', async () => {
+      const recommendations = await __createRecommendationForRandom();
+
+      jest
+        .spyOn(Math, "random")
+        .mockReturnValueOnce(0.9);
+
+      jest
+        .spyOn(recommendationRepository, "findAll")
+        .mockImplementationOnce((): any => { return recommendations.filter(value => value.score < 10 ) });
+      
+
+      const result = await recommendationService.getRandom();
+
+      expect(recommendationRepository.findAll).toBeCalled();
+      expect(result).toBeInstanceOf(Object);
+      expect(recommendations).toContain(result);
     });
 
     it('Testa a função getRandom não encontrando nada', async () => {
@@ -171,12 +206,6 @@ describe('Testes unitários do recommendation Service', () => {
     });
 
     it('Testa a função getByScore vazia', async () => {
-    });
-
-    it('Testa a função getScoreFilter acima de 70%', async () => {
-    });
-
-    it('Testa a função getScoreFilter abaixo de 70%', async () => {
     });
     
   });
