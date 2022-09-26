@@ -8,6 +8,8 @@
       "forceConsistentCasingInFileNames": true,
       "skipLibCheck": true,
       "strict": true,
+      "checkJs": true,
+      "removeComments": true,
       "resolveJsonModule": true
   },
   "include": ["src", "tests"],
