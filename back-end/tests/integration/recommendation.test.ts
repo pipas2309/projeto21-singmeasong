@@ -90,5 +90,21 @@ describe("Teste em POST /recommendations", () => {
     });
 });
 describe("Teste em GET /recommendations", () => {
+    it("Teste de pegar as ultimas recomendações", async () => {
+        const recommendation = await __newRecommendation(); 
+
+        await server.post('/recommendations').send(recommendation);
+
+        const result = await server.get('/recommendations');
+
+        expect(result.status).toBe(200);
+    });
+
+    it("Teste de pegar as ultimas recomendações, vazia", async () => {
+        const result = await server.get('/recommendations');
+
+        expect(result.status).toBe(200);
+        expect(result.body).toStrictEqual([]);
+    });
 
 });
